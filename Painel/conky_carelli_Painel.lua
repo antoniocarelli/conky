@@ -114,7 +114,7 @@ function texto(txt, x, y, r, g, b)
     -- Inicializa o Cairo com as configurações de fontes
     cairo_select_font_face (cr, font, font_slant, font_face);
     cairo_set_font_size (cr, font_size)
-    
+
     text=txt
     xpos,ypos=x,y
     red,green,blue = r,g,b
@@ -160,13 +160,13 @@ function conky_main()
     x=57
     y=310
     valor  = 100-tonumber(conky_parse("${fs_free_perc /home/carelli}"))
-    indicador_arco(x, y, valor, "Dados", rgb(0, 164, 209))
+    indicador_arco(x, y, valor, "/Home", rgb(0, 164, 209))
 
     -- Indicador Disco (Root)
     x=57
     y=390
     valor  = 100-tonumber(conky_parse("${fs_free_perc /}"))
-    indicador_arco(x, y, valor, "System", rgb(141, 255, 141))
+    indicador_arco(x, y, valor, "/", rgb(141, 255, 141))
 
     -- Indicador ethernet
     -- x=57
