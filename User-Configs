@@ -1,16 +1,15 @@
-### Carelli
-#### Horizontal
-[![screenshot](https://github.com/antoniocarelli/conky/blob/master/Horizontal/conky_carelli_Doc-thumb.png)](https://github.com/antoniocarelli/conky/blob/master/Horizontal/conky_carelli_Doc.png)
-* [conky.conf](https://github.com/antoniocarelli/conky/blob/master/Horizontal/conky_carelli_Doc.conf)
+### Carelli -> Vertical
+[![screenshot](https://github.com/antoniocarelli/conky/blob/master/Vertical/conky_carelli_Doc-thumb.png)](https://github.com/antoniocarelli/conky/blob/master/Horizontal/conky_carelli_Doc.png)
+* [conky.conf](https://github.com/antoniocarelli/conky/blob/master/Vertical/conky_carelli_Doc.conf)
 * [Conky Icons](https://github.com/antoniocarelli/conky/blob/master/Conky%20Icons%20by%20Carelli.ttf)
 
-#### Vertical
-[![screenshot](https://github.com/antoniocarelli/conky/blob/master/Vertical/Conky_Carelli-thumb.png)](https://github.com/antoniocarelli/conky/blob/master/Vertical/Conky_Carelli.png)
-* [conky.conf](https://github.com/antoniocarelli/conky/blob/master/Vertical/conky_carelli.conf)
+### Carelli -> Horizontal
+[![screenshot](https://github.com/antoniocarelli/conky/blob/master/Horizontal/Conky_Carelli-thumb.png)](https://github.com/antoniocarelli/conky/blob/master/Vertical/Conky_Carelli.png)
+* [conky.conf](https://github.com/antoniocarelli/conky/blob/master/Horizontal/conky_carelli.conf)
 * [Conky Icons](https://github.com/antoniocarelli/conky/blob/master/Conky%20Icons%20by%20Carelli.ttf)
 
-#### Painel (with Lua)
-[![screenshot](https://github.com/antoniocarelli/conky/blob/master/Painel/conky_carelli_Painel-Thumb.png)](https://github.com/antoniocarelli/conky/blob/master/Painel/conky_carelli_Painel.png)
+### Carelli -> Painel (with Lua)
+[![screenshot](https://github.com/antoniocarelli/conky/blob/master/Painel/conky_carelli_Painel-Detalhe-Thumb.png)](https://github.com/antoniocarelli/conky/blob/master/Painel/conky_carelli_Painel-Detalhe.png)
 * [conky.conf](https://github.com/antoniocarelli/conky/blob/master/Painel/conky_carelli_Painel.conf)
 * [script.lua](https://github.com/antoniocarelli/conky/blob/master/Painel/conky_carelli_Painel.lua)
 * [Conky Icons](https://github.com/antoniocarelli/conky/blob/master/Conky%20Icons%20by%20Carelli.ttf)
