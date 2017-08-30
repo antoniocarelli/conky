@@ -156,11 +156,11 @@ function conky_main()
     valor = conky_parse("${swapperc}")
     indicador_arco(x, y, valor, "SWAP", rgb(220, 127, 220))
 
-    -- Indicador Disco (Dados)
+    -- Indicador Disco (Home)
     x=57
     y=310
-    valor  = 100-tonumber(conky_parse("${fs_free_perc /home/carelli}"))
-    indicador_arco(x, y, valor, "/Home", rgb(0, 164, 209))
+    valor  = 100-tonumber(conky_parse("${fs_free_perc /home}"))
+    indicador_arco(x, y, valor, "/home", rgb(0, 164, 209))
 
     -- Indicador Disco (Root)
     x=57
@@ -168,11 +168,11 @@ function conky_main()
     valor  = 100-tonumber(conky_parse("${fs_free_perc /}"))
     indicador_arco(x, y, valor, "/", rgb(141, 255, 141))
 
-    -- Indicador ethernet
-    -- x=57
-    -- y=450
-    -- valor  = conky_parse("${downspeedf enp37s0}") + conky_parse("${upspeedf enp37s0}")
-    -- indicador_arco(x, y, valor, "Eth", rgb(220, 127, 220))
+    -- Indicador Disco (Boot)
+    --x=57
+    --y=470
+    --valor  = 100-tonumber(conky_parse("${fs_free_perc /boot}"))
+    --indicador_arco(x, y, valor, "/boot", rgb(220, 127, 220))
 
 
     cairo_destroy(cr)
