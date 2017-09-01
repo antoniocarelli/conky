@@ -15,12 +15,12 @@ function rgb( r, g, b )
     return red, green, blue
 end
 
-function cpu_bar(x, y, h, w, valor, red, green, blue)
+function indicador_barra_h(x, y, valor, max, red, green, blue)
     --SETTINGS FOR CPU INDICATOR BAR
     bar_bottom_left_x = x
     bar_bottom_left_y = y
-    bar_width = w
-    bar_height = h
+    bar_width = 100
+    bar_height = 5
 
     --set bar background colors
     bar_bg_red,bar_bg_green,bar_bg_blue=rgb(200,200,200)
@@ -38,12 +38,10 @@ function cpu_bar(x, y, h, w, valor, red, green, blue)
     cairo_fill (cr)
 
     --draw indicator
+    indicator_width=valor/max*bar_width
+
     cairo_set_source_rgba (cr, bar_in_red, bar_in_green, bar_in_blue, bar_in_alpha)
-    value=valor
-    max_value=100
-    scale=bar_height/max_value
-    indicator_height=scale*value
-    cairo_rectangle (cr, bar_bottom_left_x, bar_bottom_left_y, bar_width, -indicator_height)
+    cairo_rectangle (cr, bar_bottom_left_x, bar_bottom_left_y, indicator_width, -bar_height)
     cairo_fill (cr)
 end
 
@@ -169,11 +167,57 @@ function conky_main()
     indicador_arco(x, y, valor, "/", rgb(141, 255, 141))
 
     -- Indicador Disco (Boot)
-    --x=57
-    --y=470
-    --valor  = 100-tonumber(conky_parse("${fs_free_perc /boot}"))
-    --indicador_arco(x, y, valor, "/boot", rgb(220, 127, 220))
+    x=57
+    y=470
+    valor  = 100-tonumber(conky_parse("${fs_free_perc /boot}"))
+    indicador_arco(x, y, valor, "/boot", rgb(0,206,209))
 
+    -- Indicadores Wlan
+    x=7
+    y=530
+    txt="Wlan:"
+    texto(txt, x, y, rgb(106,90,205))
+
+    y=544
+    txt=conky_parse("${addrs wlo1}")
+    texto(txt, x, y, rgb(106,90,205))
+
+    -- Upload
+    y=554
+    valor = tonumber(conky_parse("${upspeedf wlo1}"))
+    max = 1500
+    indicador_barra_h(x, y, valor, max, rgb(106,90,205))
+
+    -- Download
+    y=570
+    valor = tonumber(conky_parse("${downspeedf wlo1}"))
+    max = 5000
+    indicador_barra_h(x, y, valor, max, rgb(255,127,80))
+
+    -- Indicadores Eth
+    y=600
+    txt="Eth:"
+    texto(txt, x, y, rgb(244,164,96))
+
+    y=614
+    txt=conky_parse("${addrs enp37s0}")
+    texto(txt, x, y, rgb(244,164,96))
+
+    -- Upload
+    y=624
+    valor = tonumber(conky_parse("${upspeedf enp37s0}"))
+    max = 1500
+    indicador_barra_h(x, y, valor, max, rgb(106,90,205))
+
+    -- Download
+    y=640
+    max = 5000
+    valor = tonumber(conky_parse("${downspeedf enp37s0}"))
+    indicador_barra_h(x, y, valor, max, rgb(255,127,80))
+
+    --y=700
+    --txt = conky_parse("${downspeedf wlo1}")
+    --texto(txt, x, y, rgb(244,164,96))
 
     cairo_destroy(cr)
     cairo_surface_destroy(cs)
