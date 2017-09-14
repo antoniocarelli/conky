@@ -37,8 +37,22 @@ function indicador_barra_h(x, y, valor, max, red, green, blue)
     cairo_rectangle(cr, bar_bottom_left_x, bar_bottom_left_y, bar_width, -bar_height)
     cairo_fill (cr)
 
+    -- Logarithmic scale
+--    minp = 0
+--    maxp = bar_width
+
+    -- The result should be between 100 and max
+--    minv = math.log(1)
+--    maxv = math.log(max)
+
+    -- calculate adjustment factor
+--    scale = (maxv-minv) / (maxp-minp)
+
+--    indicator_width = math.exp(minv + scale*(valor-minp))
+
     --draw indicator
-    indicator_width=valor/max*bar_width
+    proportion = valor/max
+    indicator_width=proportion*bar_width
 
     cairo_set_source_rgba (cr, bar_in_red, bar_in_green, bar_in_blue, bar_in_alpha)
     cairo_rectangle (cr, bar_bottom_left_x, bar_bottom_left_y, indicator_width, -bar_height)
@@ -215,9 +229,12 @@ function conky_main()
     valor = tonumber(conky_parse("${downspeedf enp37s0}"))
     indicador_barra_h(x, y, valor, max, rgb(255,127,80))
 
-    --y=700
-    --txt = conky_parse("${downspeedf wlo1}")
-    --texto(txt, x, y, rgb(244,164,96))
+--    y=700
+--    txt = conky_parse("${upspeedf wlo1}")
+--    texto(txt, x, y, rgb(244,164,96))
+--    y=720
+--    txt = conky_parse("${downspeedf wlo1}")
+--    texto(txt, x, y, rgb(244,164,96))
 
     cairo_destroy(cr)
     cairo_surface_destroy(cs)
