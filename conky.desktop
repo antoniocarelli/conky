@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=conky
+Exec=conky --daemonize --pause=1
+StartupNotify=false
+Terminal=false
+Icon=/home/antonio/Imagens/conky-logo/conky-logomark-violet.png
+Categories=System;Monitor;

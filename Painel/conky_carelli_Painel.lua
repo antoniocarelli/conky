@@ -15,6 +15,11 @@ function rgb( r, g, b )
     return red, green, blue
 end
 
+function hex2rgb(hex)
+	hex = hex:gsub("#","")
+	return (tonumber("0x"..hex:sub(1,2))/255), (tonumber("0x"..hex:sub(3,4))/255), tonumber(("0x"..hex:sub(5,6))/255)
+end
+
 function indicador_barra_h(x, y, valor, max, log, red, green, blue)
     --SETTINGS FOR CPU INDICATOR BAR
     bar_bottom_left_x = x
@@ -67,19 +72,19 @@ function indicador_arco(x, y, valor, label, red, green, blue)
     ring_center_x=x
     ring_center_y=y
 
-    ring_radius=32
-    ring_width=5
+    ring_radius=50
+    ring_width=10
 
     --colors
     --set background colors
-    ring_bg_red, ring_bg_green, ring_bg_blue=rgb(200,200,200)
-    ring_bg_alpha=1
+    ring_in_red, ring_in_green, ring_in_blue=rgb(0,0,0)
+    ring_in_alpha=1
 
     --set indicator colors
-    ring_in_red=red
-    ring_in_green=green
-    ring_in_blue=blue
-    ring_in_alpha=1
+    ring_bg_red=red
+    ring_bg_green=green
+    ring_bg_blue=blue
+    ring_bg_alpha=1
 
     --indicator value settings
     value=valor
@@ -91,7 +96,7 @@ function indicador_arco(x, y, valor, label, red, green, blue)
     cairo_arc (cr,ring_center_x,ring_center_y,ring_radius,0,2*math.pi)
     cairo_stroke (cr)
 
-    cairo_set_line_width (cr,ring_width)
+    cairo_set_line_width (cr,ring_width+2)
     start_angle = angulo(0)
     end_angle=angulo( value*(360/max_value) )
 
@@ -106,22 +111,22 @@ function indicador_arco(x, y, valor, label, red, green, blue)
     tolua.takeownership(extents)
     cairo_text_extents(cr, label, extents)
     x = ring_center_x - (extents.width / 2 + extents.x_bearing)
-    y = ring_center_y - (extents.height / 2 + extents.y_bearing) - 7
+    y = ring_center_y - (extents.height / 2 + extents.y_bearing) - 9
 
     texto(label, x, y, red, green, blue )
 
     txt = valor .. "%"
     cairo_text_extents(cr, txt, extents)
     x = ring_center_x - (extents.width / 2 + extents.x_bearing)
-    y = ring_center_y - (extents.height / 2 + extents.y_bearing) + 7
+    y = ring_center_y - (extents.height / 2 + extents.y_bearing) + 9
 
     texto(txt, x, y, red, green, blue )
 end
 
 function texto(txt, x, y, r, g, b)
     -- Configura o tipo e o tamanho da fonte que será utilizada
-    font="Ubuntu Mono"
-    font_size=14
+    font="Technical CE"
+    font_size=20
     font_slant=CAIRO_FONT_SLANT_NORMAL
     font_face=CAIRO_FONT_WEIGHT_BOLD
 
@@ -141,6 +146,13 @@ function texto(txt, x, y, r, g, b)
 end
 
 function conky_main()
+
+    space = 130
+
+    -- Inicial posisions
+    x=55
+    y=70
+
     if conky_window == nil then
         return
     end
@@ -153,91 +165,29 @@ function conky_main()
     cr = cairo_create(cs)
 
     -- Indicador CPU
-    x=57
-    y=70
     valor = conky_parse("${cpu cpu0}")
     indicador_arco(x, y, valor, "CPU", rgb(255, 117, 49))
 
     -- Indicador RAM
-    x=57
-    y=150
+    y=y+space
     valor = conky_parse("${memperc}")
     indicador_arco(x, y, valor, "RAM", rgb(255, 255, 112))
 
     -- Indicador SWAP
-    x=57
-    y=230
+    y=y+space
     valor = conky_parse("${swapperc}")
     indicador_arco(x, y, valor, "SWAP", rgb(220, 127, 220))
 
     -- Indicador Disco (Home)
-    x=57
-    y=310
+    y=y+space
     valor  = 100-tonumber(conky_parse("${fs_free_perc /home}"))
-    indicador_arco(x, y, valor, "/home", rgb(0, 164, 209))
+    indicador_arco(x, y, valor, "Home", rgb(0, 164, 209))
 
     -- Indicador Disco (Root)
-    x=57
-    y=390
+    y=y+space
     valor  = 100-tonumber(conky_parse("${fs_free_perc /}"))
-    indicador_arco(x, y, valor, "/", rgb(141, 255, 141))
-
-    -- Indicador Disco (Boot)
-    x=57
-    y=470
-    valor  = 100-tonumber(conky_parse("${fs_free_perc /boot}"))
-    indicador_arco(x, y, valor, "/boot", rgb(0,206,209))
-
-    -- Indicadores Wlan
-    x=7
-    y=530
-    txt="Wlan:"
-    log = true
-    texto(txt, x, y, rgb(106,90,205))
-
-    y=544
-    txt=conky_parse("${addrs wlo1}")
-    texto(txt, x, y, rgb(106,90,205))
-
-    -- Upload
-    y=554
-    valor = tonumber(conky_parse("${upspeedf wlo1}"))
-    max = 1500
-    indicador_barra_h(x, y, valor, max, log, rgb(106,90,205))
-
-    -- Download
-    y=570
-    valor = tonumber(conky_parse("${downspeedf wlo1}"))
-    max = 5000
-    indicador_barra_h(x, y, valor, max, log, rgb(255,127,80))
-
-    -- Indicadores Eth
-    y=600
-    txt="Eth:"
-    texto(txt, x, y, rgb(244,164,96))
-
-    y=614
-    txt=conky_parse("${addrs enp37s0}")
-    texto(txt, x, y, rgb(244,164,96))
-
-    -- Upload
-    y=624
-    valor = tonumber(conky_parse("${upspeedf enp37s0}"))
-    max = 1500
-    indicador_barra_h(x, y, valor, max, log, rgb(106,90,205))
-
-    -- Download
-    y=640
-    max = 5000
-    valor = tonumber(conky_parse("${downspeedf enp37s0}"))
-    indicador_barra_h(x, y, valor, max, log, rgb(255,127,80))
-
---    y=700
---    txt = conky_parse("${upspeedf wlo1}")
---    texto(txt, x, y, rgb(244,164,96))
---    y=720
---    txt = conky_parse("${downspeedf wlo1}")
---    texto(txt, x, y, rgb(244,164,96))
+--    indicador_arco(x, y, valor, "Root", rgb(141, 255, 141))
+    indicador_arco(x, y, valor, "Root", hex2rgb("#44d31f"))
 
     cairo_destroy(cr)
     cairo_surface_destroy(cs)
