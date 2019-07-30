@@ -2,9 +2,8 @@ require 'cairo'
 
 -- Configurações --
 space = 21  -- Espaço para pular para próxima linha (texto e tabela)
-margemX = 22
 
--- Tipo e o tamanho da fonte que será utilizada
+-- Configurações da fonte que será utilizada
 font="Technical CE"
 font_size=17
 font_slant=CAIRO_FONT_SLANT_NORMAL
@@ -14,7 +13,7 @@ corValor = "#f09309"
 
 -- Parâmetros da tabela
 line_cap = CAIRO_LINE_CAP_BUTT
-larguraTabela = 550
+larguraTabela = 650
 transparencia = 0.15
 corTitulo = "#FFFFFF" -- Linha do cabeçalho
 corPar = "#53c9d6"    -- Linhas pares
@@ -150,11 +149,10 @@ function openPorts(x, y)
   txt = "Open Ports:"
   texto(txt, x, y, hex2rgb(corLabel) )
 
-  x = 120
+  xx = x + 100
   numPorts = tostring(conky_parse("${tcp_portmon 1 65535 count}"))
-  texto(numPorts, x, y, hex2rgb(corValor) )
+  texto(numPorts, xx, y, hex2rgb(corValor) )
 
-  x = margemX + 3
   y = y+space+space
 
   --Títulos da tabela
@@ -222,7 +220,6 @@ function rede(x, y, adaptador)
   return yy
 end
 
-
 function pip (x, y)
   xx = x
   yy = y
@@ -235,6 +232,74 @@ function pip (x, y)
   return yy
 end
 
+function titulo(label, x, y, sentido, gap, r, g, b)
+  -- Inicializa o Cairo com as configurações de fontes
+  f = "Roboto Mono Medium"
+  fs = 32
+
+  cairo_select_font_face (cr, f, font_slant, font_face);
+  cairo_set_font_size (cr, fs)
+
+  alpha=1
+  cairo_set_source_rgba (cr,r,g,b,alpha)
+
+  -- Configura a linha
+  line_width = 5
+  cairo_set_line_width (cr,line_width)
+  cairo_set_line_cap  (cr, line_cap)
+  cairo_set_source_rgba (cr,r,g,b,alpha)
+
+  xpos = x + 50
+  ypos = y
+  cairo_move_to (cr, xpos, ypos)
+  cairo_show_text (cr, label)
+
+  -- Desenha a linha horizontal
+  endy = y-8
+  endx = x
+  cairo_move_to (cr,endx,endy)
+  endx = endx + 40
+  cairo_line_to (cr,endx,endy)
+  endx = endx + gap
+  cairo_move_to (cr,endx,endy)
+  endx = larguraTabela + x - gap + 40
+  cairo_line_to (cr,endx,endy)
+
+  --desenha a curva
+  if sentido == "down" then
+    ring_radius=50
+    ring_center_x=endx
+    ring_center_y=endy+ring_radius
+    start_angle = angulo(0)
+    end_angle = angulo(90)
+  else
+    ring_radius=50
+    ring_center_x=endx
+    ring_center_y=endy-ring_radius
+    endx = endx + ring_radius
+    endy = endy - ring_radius
+    cairo_move_to (cr,endx,endy)
+    start_angle = angulo(90)
+    end_angle = angulo(180)
+  end
+
+  cairo_arc (cr, ring_center_x, ring_center_y, ring_radius, start_angle, end_angle)
+
+  -- desenha a linha vertical
+  if sentido == "down" then
+    endx = endx + ring_radius
+    endy = endy + ring_radius
+    cairo_move_to (cr,endx,endy)
+    endy = endy + 7*space
+  else
+    cairo_move_to (cr,endx,endy)
+    endy = 0
+  end
+
+  cairo_line_to (cr,endx,endy)
+  cairo_stroke (cr)
+end
+
 function conky_main()
     if conky_window == nil then
         return
@@ -245,57 +310,64 @@ function conky_main()
     cr = cairo_create(cs)
 
     -- Posição Rede
-    gap_x = 1150,
-  	gap_y = 600,
+--    start_x = 1150
+--  	start_y = 400
+    start_x = 700
+  	start_y = 250
+
+    titulo("Rede", start_x, start_y, "down", 110, hex2rgb("#00a4d1"))
 
     -- Wlan
-    x = gap_x
-    y = gap_y + 95
+    x = start_x
+    y = start_y + 40
     rede(x, y, wlanAdapter)
 
     -- Eth
-    x = gap_x + 300
-    y = gap_y + 95
+    x = start_x + 300
+    y = start_y + 40
     y = rede(x, y, ethAdapter)
 
     -- Public IP:
-    x = gap_x
+    x = start_x
     y = y + space + space
     y = pip(x, y)
 
     -- Lista de portas abertas
-    x = gap_x
+    x = start_x
     y = y + space
-    y = openPorts(x, y)
+    openPorts(x, y)
 
     -- Indicador CPU
-    x=55
-    y=70
+    gap = 120
+    x = start_x + 50
+    y=80
     valor = conky_parse("${cpu cpu0}")
     indicador_arco(x, y, valor, "CPU", rgb(255, 117, 49))
 
     -- Indicador RAM
-    y=y+space
+    x = x + gap
     valor = conky_parse("${memperc}")
     indicador_arco(x, y, valor, "RAM", rgb(255, 255, 112))
 
     -- Indicador SWAP
-    y=y+space
+    x = x + gap
     valor = conky_parse("${swapperc}")
     indicador_arco(x, y, valor, "SWAP", rgb(220, 127, 220))
 
     -- Indicador Disco (Home)
-    y=y+space
+    x = x + gap
     valor  = 100-tonumber(conky_parse("${fs_free_perc /home}"))
     indicador_arco(x, y, valor, "Home", rgb(0, 164, 209))
 
     -- Indicador Disco (Root)
-    y=y+space
+    x = x + gap
     valor  = 100-tonumber(conky_parse("${fs_free_perc /}"))
 --    indicador_arco(x, y, valor, "Root", rgb(141, 255, 141))
     indicador_arco(x, y, valor, "Root", hex2rgb("#44d31f"))
 
-
+    x = start_x
+    y = y + 85
+    titulo("Indicadores", x, y, "up", 245, hex2rgb("#00a4d1"))
 
 
 
