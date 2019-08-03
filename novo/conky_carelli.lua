@@ -1,19 +1,24 @@
 -- Rede
 exibeRede = true
+exibeListaPortasRede = false
 tituloRede = "Rede"
 gapRede = 90
-redeX = 100
-redeY = 50
+redeX = 1200
+redeY = 235
 
 -- Indicadores
-exibeIndicadores = false
-indicadoresX = 1300
+exibeIndicadores = true
+tituloIndicadores = "Indicadores"
+gapIndicadores = 185
+indicadoresX = 1200
 indicadoresY = 50
 
 -- Processos
-exibeProcessos = false
-processosX = 1400
-processosY = 800
+exibeProcessos = true
+tituloProcessos = "Processos"
+gapProcessos = 170
+processosX = 1200
+processosY = 470
 
 -- Configuracoes gerais
 fontName="Technical CE"
@@ -58,7 +63,6 @@ corValorRede = corValor
 corBordaRede = corBorda
 
 -- Parametros da tabela Rede
-linecapRede = CAIRO_LINE_CAP_BUTT
 larguraTabelaRede = 650
 transparenciaRede = 0.15
 corTituloRede = corTitulo -- Linha do cabecalho
@@ -70,11 +74,11 @@ tableFontColorRede = tableFontColor
 gapIndicador = 120
 raioIndicador = 50
 espessuraIndicador = 8
-corSeparadorIndicadores = "F2CB19"
+corBordaIndicadores = "F2CB19"
 -------------------
 
 -- Parametros Processos
-corSeparadorProcessos = "94b672"
+corBordaProcessos = "94b672"
 
 
 require 'cairo'
@@ -98,7 +102,7 @@ function desenhaLinha(corHex, startX, startY, endX, endY, espessura)
 
   -- Configura a linha
   cairo_set_line_width (cr, espessura)
-  cairo_set_line_cap  (cr, linecapRede)
+  cairo_set_line_cap  (cr, CAIRO_LINE_CAP_BUTT)
 
   cairo_move_to (cr, startX, startY)
   cairo_line_to (cr, endX, endY)
@@ -113,7 +117,7 @@ function desenhaArco(corHex, raio, centroX, centroY, posX, posY, espessura, angu
 
   -- Configura o arco
   cairo_set_line_width (cr, espessura)
-  cairo_set_line_cap  (cr, linecapRede)
+  cairo_set_line_cap  (cr, CAIRO_LINE_CAP_BUTT)
 
   local startAngle = angulo(anguloInicial)
   local endAngle = angulo(anguloFinal)
@@ -138,36 +142,70 @@ function texto(txt, x, y, corHex, fs)
     cairo_stroke(cr)
 end
 
-function titulo(label, x, y, corHex, altura, largura, gap)
+function titulo(label, xInicial, yInicial, corHex, altura, largura, gap)
+  local ajusteTituloY = 8
+
   -- Escreve titulo
-  local xpos = x + 50
-  local ypos = y
+  local xpos = xInicial + 50
+  local ypos = yInicial
   texto(label, xpos, ypos, corHex, 32)
 
-  -- Desenha a linha horizontal
-  local startX = x
-  local startY = y-8
+  -- Desenha a linha horizontal superior
+  local startX = xInicial
+  local startY = yInicial - ajusteTituloY
   local endX = startX + 40
   local endY = startY
   desenhaLinha(corHex, startX, startY, endX, endY, espessuraBorda)
 
   startX = endX + gap
-  endX = x + largura - raioBorda - (espessuraBorda/2)
+  endX = xInicial + largura --+ margensBorda
   desenhaLinha(corHex, startX, startY, endX, endY, espessuraBorda)
 
-  --desenha a curva
+  --desenha a curva canto superior direito
   local centroX = endX
   local centroY = endY + raioBorda
   local aInicial = 0
   local aFinal = 90
   desenhaArco(corHex, raioBorda, centroX, centroY, startX, startY, espessuraBorda, aInicial, aFinal)
 
-  -- desenha a linha vertical
+  -- desenha a linha vertical direita
   startX = endX + raioBorda
   startY = endY + raioBorda
-  endX = startX
-  endY = endY + altura + 8 + (espessuraBorda/2)
-  desenhaLinha(corHex, startX, startY, endX, endY, espessuraBorda)
+  endY = endY + altura + ajusteTituloY + margensBorda
+  desenhaLinha(corHex, startX, startY, startX, endY, espessuraBorda)
+  
+  --desenha a curva canto inferior direito
+  local centroX = endX
+  local centroY = endY
+  local aInicial = 90
+  local aFinal = 180
+  desenhaArco(corHex, raioBorda, centroX, centroY, startX, startY, espessuraBorda, aInicial, aFinal)
+
+  -- desenha a linha horizontal inferior
+  startX = endX
+  startY = endY + raioBorda
+  endX = xInicial
+  desenhaLinha(corHex, startX, startY, endX, startY, espessuraBorda)
+  
+  --desenha a curva canto inferior esquerdo
+  local centroX = endX
+  local centroY = endY
+  local aInicial = 180
+  local aFinal = 270
+  desenhaArco(corHex, raioBorda, centroX, centroY, startX, startY, espessuraBorda, aInicial, aFinal)
+  
+  -- desenha a linha vertical esquerda
+  startX = endX - raioBorda
+  startY = endY
+  endY = yInicial + raioBorda - ajusteTituloY
+  desenhaLinha(corHex, startX, startY, startX, endY, espessuraBorda)
+  
+  --desenha a curva canto superior esquerdo
+  local centroX = endX
+  local centroY = endY
+  local aInicial = 270
+  local aFinal = 360
+  desenhaArco(corHex, raioBorda, centroX, centroY, startX, startY, espessuraBorda, aInicial, aFinal)
 end
 
 function indicadorArco(x, y, valor, label, cor)
@@ -211,7 +249,7 @@ function desenhaTabela(xx, yy, pos, largura)
 
   -- Configura a tabela
   cairo_set_line_width (cr, alturaLinhaTabela)
-  cairo_set_line_cap  (cr, linecapRede)
+  cairo_set_line_cap  (cr, CAIRO_LINE_CAP_BUTT)
   local vermelho,verde,azul=hex2rgb(cor)
   cairo_set_source_rgba (cr,vermelho,verde,azul,transparenciaRede)
 
@@ -230,37 +268,40 @@ function openPorts(x, y)
   texto(txt, x, y, corLabelRede, fontSize)
 
   local xx = x + 100
-  local numPorts = tostring(conky_parse("${tcp_portmon 1 65535 count}"))
+  local numPorts = tonumber(conky_parse("${tcp_portmon 1 65535 count}"))
   texto(numPorts, xx, y, corValorRede, fontSize)
 
-  local yy = y+alturaLinhaTabela+alturaLinhaTabela
+  local yy = y
 
-  --Titulos da tabela
-  txt = "Port"
-  texto(txt, x, yy, tableFontColorRede, fontSize)
-  txt = "IP"
-  ipX = x+70
-  texto(txt, ipX, yy, tableFontColorRede, fontSize)
-  txt = "Host"
-  hostX = ipX+140
-  texto(txt, hostX, yy, tableFontColorRede, fontSize)
-  txt = "rhost"
-
-  -- Desenha bordas do titulo
-  desenhaTabela(x, yy, -1, larguraTabelaRede)
-
-  for i=0,numPorts-1 do
-      local rport = tostring(conky_parse("${tcp_portmon 1 65535 rport " .. i .. "}"))
-      local rip = tostring(conky_parse("${tcp_portmon 1 65535 rip " .. i .. "}"))
-      local rhost = conky_parse("${tcp_portmon 1 65535 rhost " .. i .. "}")
-
-      yy = yy+alturaLinhaTabela
-      texto(rport, x, yy, tableFontColorRede, fontSize)
-      texto(rip, ipX, yy, tableFontColorRede, fontSize)
-      texto(rhost, hostX, yy, tableFontColorRede, fontSize)
-      desenhaTabela(x, yy, i, larguraTabelaRede)
+  if exibeListaPortasRede then
+      yy = yy + alturaLinhaTabela + alturaLinhaTabela
+    
+      --Titulos da tabela
+      txt = "Port"
+      texto(txt, x, yy, tableFontColorRede, fontSize)
+      txt = "IP"
+      ipX = x+70
+      texto(txt, ipX, yy, tableFontColorRede, fontSize)
+      txt = "Host"
+      hostX = ipX+140
+      texto(txt, hostX, yy, tableFontColorRede, fontSize)
+      txt = "rhost"
+    
+      -- Desenha bordas do titulo
+      desenhaTabela(x, yy, -1, larguraTabelaRede)
+    
+      for i=0,numPorts-1 do
+          local rport = tonumber(conky_parse("${tcp_portmon 1 65535 rport " .. i .. "}"))
+          local rip = tostring(conky_parse("${tcp_portmon 1 65535 rip " .. i .. "}"))
+          local rhost = conky_parse("${tcp_portmon 1 65535 rhost " .. i .. "}")
+    
+          yy = yy+alturaLinhaTabela
+          texto(rport, x, yy, tableFontColorRede, fontSize)
+          texto(rip, ipX, yy, tableFontColorRede, fontSize)
+          texto(rhost, hostX, yy, tableFontColorRede, fontSize)
+          desenhaTabela(x, yy, i, larguraTabelaRede)
+      end
   end
-
   return yy
 end
 
@@ -313,10 +354,6 @@ function pip (x, y)
 end
 
 function rede(startX, startY)
-  local altura = 9*alturaLinhaTabela
-  local largura = larguraTabelaRede 
-  titulo(tituloRede, startX, startY, corBordaRede, altura, largura, gapRede)
-
   -- Wlan
   local x = startX
   local y = startY + 40
@@ -335,15 +372,18 @@ function rede(startX, startY)
   -- Lista de portas abertas
   x = startX
   y = y + alturaLinhaTabela
-  openPorts(x, y)
+  local altura = openPorts(x, y)
+
+  local largura = larguraTabelaRede
+  altura = altura - startY
+  titulo(tituloRede, startX, startY, corBordaRede, altura, largura, gapRede)
 end
 
 function indicadores(startX, startY)
     --Titulo
     local altura = gapIndicador
     local largura = 5*gapIndicador
-    local gap = 185
-    titulo("Indicadores", startX, startY, corSeparadorIndicadores, altura, largura, gap)
+    titulo(tituloIndicadores, startX, startY, corBordaIndicadores, altura, largura, gapIndicadores)
 
     -- Ajusta a posição dos indicadores.
     startY = startY + 15
@@ -374,21 +414,13 @@ function indicadores(startX, startY)
 end
 
 function processos(processosX, processosY)
---  Process       PID           CPU%          MEM%
---  ${top name 1} ${top pid 1}  ${top cpu 1}  ${top mem 1}
-
-    --Titulo
-    local altura = alturaLinhaTabela * 12 -- O conky limita a 10 processos (mais a linha de título e o espaco extra)
-    local largura = 500
-    local gap = 170
-    titulo("Processos", processosX, processosY, corSeparadorProcessos, altura, largura, gap)
-
     local procX = processosX
     local pidX =  procX + 200
-    local cpuX =  pidX + 70
-    local memX =  cpuX + 70
+    local cpuX =  pidX + 90
+    local memX =  cpuX + 90
+    local largura = 450
 
-    local y = processosY + alturaLinhaTabela + 9
+    local y = processosY + alturaLinhaTabela + margensBorda
 
 --    --Titulos da tabela
     txt = "Processos"
@@ -401,8 +433,7 @@ function processos(processosX, processosY)
     texto(txt, memX, y, tableFontColor, fontSize)
 
     -- Desenha bordas do titulo
-    local larguraTabela = largura - 25
-    desenhaTabela(processosX, y, -1, larguraTabela)
+    desenhaTabela(processosX, y, -1, largura)
 
     for i=1, 10 do
         local proc = tostring(conky_parse("${top name " .. i .. "}"))
@@ -415,8 +446,12 @@ function processos(processosX, processosY)
         texto(pid,  pidX,  y, tableFontColorRede, fontSize)
         texto(cpu,  cpuX,  y, tableFontColorRede, fontSize)
         texto(mem,  memX,  y, tableFontColorRede, fontSize)
-        desenhaTabela(processosX, y, i, larguraTabela)
+        desenhaTabela(processosX, y, i, largura)
     end
+    
+    --Titulo
+    local altura = y - processosY
+    titulo(tituloProcessos, processosX, processosY, corBordaProcessos, altura, largura, gapProcessos)
 end
 
 function conky_main()
