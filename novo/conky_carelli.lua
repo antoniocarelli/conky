@@ -3,46 +3,66 @@ exibeRede = true
 exibeListaPortasRede = false
 tituloRede = "Rede"
 gapRede = 90
-redeX = 1200
+redeX = 650 --1200
 redeY = 235
 
 -- Indicadores
 exibeIndicadores = true
 tituloIndicadores = "Indicadores"
-gapIndicadores = 185
-indicadoresX = 1200
+gapTituloIndicadores = 185
+gapIndicadores = 120
+indicadoresX = redeX
 indicadoresY = 50
+raioIndicador = 50
+espessuraIndicador = 8
 
 -- Processos
 exibeProcessos = true
 tituloProcessos = "Processos"
 gapProcessos = 170
-processosX = 1200
+processosX = redeX
 processosY = 470
 
--- Configuracoes gerais
-fontName="Technical CE"
-fontSize=17
-corLabel = "44d31f"
-corValor = "f09309"
-tableFontColor = "FFFFFF"
-corTitulo = "FFFFFF" -- Linha do cabecalho
-corPar = "53c9d6"    -- Linhas pares
-corImpar = "61EAF9"  -- Linhas impares
+-- Informações
+exibeInfo = true
+tituloInfo = "Info"
+gapInfo = 75
+infoX = redeX
+infoY = 780
 
--- Outras cores - Vivas
-cor1 = "#44d31f"
-cor2 = "#df3b11"
-cor3 = "#f35aca"
-cor4 = "#f09309"
-cor5 = "#53c9d6"
-
--- Outras cores - Pasteis
+-- Cores
+cor1 = "44d31f"
+cor2 = "df3b11"
+cor3 = "f35aca"
+cor4 = "f09309"
+cor5 = "53c9d6"
 cor6 = "EBD891"
 cor7 = "8E8831"
 cor8 = "62A5A5"
 cor9 = "8A522D"
 cor10 = "1B314B"
+corBorda = "00a4d1"
+corLabel = cor5
+corValor = cor6
+tableFontColor = "FFFFFF"
+corTitulo = "FFFFFF" -- Linha do cabecalho
+corPar = "53c9d6"    -- Linhas pares
+corImpar = "61EAF9"  -- Linhas impares
+corBordaRede = corBorda
+corBordaIndicadores = corBorda
+corBordaProcessos = corBorda
+corBordaInfo = corBorda
+corCPU  = cor6
+corRAM  = cor6
+corSWAP = cor6
+corHOME = cor6
+corROOT = cor6
+
+
+-- Configuracoes gerais
+fontName="Technical CE"
+fontSize=17
+largura = 650
 
 -- Customizacoes dos adaptadores de rede
 wlanAdapter = "wlp3s0"
@@ -52,33 +72,17 @@ ethAdapter = "enp2s0"
 raioBorda = 20
 espessuraBorda = 6 --Usar apenas numeros pares
 margensBorda = 10
-corBorda = "00a4d1"
 
 -- Tabela
 alturaLinhaTabela = 21  -- Espaco para pular para proxima linha (texto e tabela)
 
--- Configuracees de Rede --
-corLabelRede = corLabel
-corValorRede = corValor
-corBordaRede = corBorda
-
 -- Parametros da tabela Rede
-larguraTabelaRede = 650
-transparenciaRede = 0.15
+transparenciaRede = 0.2
 corTituloRede = corTitulo -- Linha do cabecalho
 corParRede = corPar    -- Linhas pares
 corImparRede = corImpar  -- Linhas impares
 tableFontColorRede = tableFontColor
-
--- Parametros Indicadores
-gapIndicador = 120
-raioIndicador = 50
-espessuraIndicador = 8
-corBordaIndicadores = "F2CB19"
 -------------------
-
--- Parametros Processos
-corBordaProcessos = "94b672"
 
 
 require 'cairo'
@@ -173,7 +177,7 @@ function titulo(label, xInicial, yInicial, corHex, altura, largura, gap)
   startY = endY + raioBorda
   endY = endY + altura + ajusteTituloY + margensBorda
   desenhaLinha(corHex, startX, startY, startX, endY, espessuraBorda)
-  
+
   --desenha a curva canto inferior direito
   local centroX = endX
   local centroY = endY
@@ -186,20 +190,20 @@ function titulo(label, xInicial, yInicial, corHex, altura, largura, gap)
   startY = endY + raioBorda
   endX = xInicial
   desenhaLinha(corHex, startX, startY, endX, startY, espessuraBorda)
-  
+
   --desenha a curva canto inferior esquerdo
   local centroX = endX
   local centroY = endY
   local aInicial = 180
   local aFinal = 270
   desenhaArco(corHex, raioBorda, centroX, centroY, startX, startY, espessuraBorda, aInicial, aFinal)
-  
+
   -- desenha a linha vertical esquerda
   startX = endX - raioBorda
   startY = endY
   endY = yInicial + raioBorda - ajusteTituloY
   desenhaLinha(corHex, startX, startY, startX, endY, espessuraBorda)
-  
+
   --desenha a curva canto superior esquerdo
   local centroX = endX
   local centroY = endY
@@ -265,48 +269,48 @@ end
 
 function openPorts(x, y)
   local txt = "Open Ports:"
-  texto(txt, x, y, corLabelRede, fontSize)
+  texto(txt, x, y, corLabel, fontSize)
 
   local xx = x + 100
   local numPorts = tonumber(conky_parse("${tcp_portmon 1 65535 count}"))
-  texto(numPorts, xx, y, corValorRede, fontSize)
+  texto(numPorts, xx, y, corValor, fontSize)
 
   local yy = y
 
   if exibeListaPortasRede then
       yy = yy + alturaLinhaTabela + alturaLinhaTabela
-    
+
       --Titulos da tabela
       txt = "Port"
       texto(txt, x, yy, tableFontColorRede, fontSize)
       txt = "IP"
-      ipX = x+70
+      local ipX = x+70
       texto(txt, ipX, yy, tableFontColorRede, fontSize)
       txt = "Host"
-      hostX = ipX+140
+      local hostX = ipX+140
       texto(txt, hostX, yy, tableFontColorRede, fontSize)
       txt = "rhost"
-    
+
       -- Desenha bordas do titulo
-      desenhaTabela(x, yy, -1, larguraTabelaRede)
-    
+      desenhaTabela(x, yy, -1, largura)
+
       for i=0,numPorts-1 do
           local rport = tonumber(conky_parse("${tcp_portmon 1 65535 rport " .. i .. "}"))
           local rip = tostring(conky_parse("${tcp_portmon 1 65535 rip " .. i .. "}"))
           local rhost = conky_parse("${tcp_portmon 1 65535 rhost " .. i .. "}")
-    
+
           yy = yy+alturaLinhaTabela
           texto(rport, x, yy, tableFontColorRede, fontSize)
           texto(rip, ipX, yy, tableFontColorRede, fontSize)
           texto(rhost, hostX, yy, tableFontColorRede, fontSize)
-          desenhaTabela(x, yy, i, larguraTabelaRede)
+          desenhaTabela(x, yy, i, largura)
       end
   end
   return yy
 end
 
 function redeInfo(x, y, adaptador)
-  texto(adaptador, x, y, corLabelRede, fontSize)
+  texto(adaptador, x, y, corLabel, fontSize)
   local essid = tostring(conky_parse("${wireless_essid " .. adaptador .. "}"))
 
   if essid ~= nil and essid ~= "" then
@@ -315,28 +319,28 @@ function redeInfo(x, y, adaptador)
 
   local xx = x + 60
   local yy = y
-  texto(essid, xx, yy, corValorRede, fontSize)
+  texto(essid, xx, yy, corValor, fontSize)
 
   local addrs = tostring(conky_parse("${addr " .. adaptador .. "}"))
   xx = x
   yy = yy + alturaLinhaTabela
-  texto(addrs, xx, yy, corValorRede, fontSize)
+  texto(addrs, xx, yy, corValor, fontSize)
 
   xx = x
   yy = yy + alturaLinhaTabela
-  texto("Upload:", xx, yy, corLabelRede, fontSize)
+  texto("Upload:", xx, yy, corLabel, fontSize)
 
   local upspeed = tostring(conky_parse("${upspeed " .. adaptador .. "}"))
   xx = x + 60
-  texto(upspeed, xx, yy, corValorRede, fontSize)
+  texto(upspeed, xx, yy, corValor, fontSize)
 
   xx = x
   yy = yy + alturaLinhaTabela
-  texto("Download:", xx, yy, corLabelRede, fontSize)
+  texto("Download:", xx, yy, corLabel, fontSize)
 
   local downspeed = tostring(conky_parse("${downspeed " .. adaptador .. "}"))
   xx = x + 80
-  texto(downspeed, xx, yy, corValorRede, fontSize)
+  texto(downspeed, xx, yy, corValor, fontSize)
 
   return yy
 end
@@ -344,86 +348,87 @@ end
 function pip (x, y)
   local xx = x
   local yy = y
-  texto("Public IP:", xx, yy, corLabelRede, fontSize)
+  texto("Public IP:", xx, yy, corLabel, fontSize)
 
   local ip = tostring(conky_parse("${execi 3600 curl ipinfo.io/ip}"))
   xx = x + 75
-  texto(ip, xx, yy, corValorRede, fontSize)
+  texto(ip, xx, yy, corValor, fontSize)
 
   return yy
 end
 
 function rede(startX, startY)
   -- Wlan
-  local x = startX
+  local x = startX + margensBorda
   local y = startY + 40
   redeInfo(x, y, wlanAdapter)
 
   -- Eth
-  x = startX + 300
+  x = startX + (0.5*largura)
   y = startY + 40
   y = redeInfo(x, y, ethAdapter)
 
   -- Public IP:
-  x = startX
+  x = startX + margensBorda
   y = y + alturaLinhaTabela + alturaLinhaTabela
   y = pip(x, y)
 
   -- Lista de portas abertas
-  x = startX
+  x = startX + margensBorda
   y = y + alturaLinhaTabela
   local altura = openPorts(x, y)
 
-  local largura = larguraTabelaRede
   altura = altura - startY
   titulo(tituloRede, startX, startY, corBordaRede, altura, largura, gapRede)
 end
 
 function indicadores(startX, startY)
+    gapIndicadores = largura / 5
+    
     --Titulo
-    local altura = gapIndicador
-    local largura = 5*gapIndicador
-    titulo(tituloIndicadores, startX, startY, corBordaIndicadores, altura, largura, gapIndicadores)
+    local altura = gapIndicadores - alturaLinhaTabela
+    --local largura = 5*gapIndicadores
+    titulo(tituloIndicadores, startX, startY, corBordaIndicadores, altura, largura, gapTituloIndicadores)
 
-    -- Ajusta a posição dos indicadores.
+    -- Centraliza a posição dos indicadores.
+    startX = startX + 15
     startY = startY + 15
-
+    
     -- Indicador CPU
     local valor = tonumber( conky_parse("${cpu cpu0}") )
-    indicadorArco(startX, startY, valor, "CPU", cor1)
+    indicadorArco(startX, startY, valor, "CPU", corCPU)
 
     -- Indicador RAM
-    startX = startX + gapIndicador
+    startX = startX + gapIndicadores
     valor = tonumber( conky_parse("${memperc}") )
-    indicadorArco(startX, startY, valor, "RAM", cor2)
-    
+    indicadorArco(startX, startY, valor, "RAM", corRAM)
+
     -- Indicador SWAP
-    startX = startX + gapIndicador
+    startX = startX + gapIndicadores
     valor = tonumber( conky_parse("${swapperc}") )
-    indicadorArco(startX, startY, valor, "SWAP", cor3)
-    
+    indicadorArco(startX, startY, valor, "SWAP", corSWAP)
+
     -- Indicador Disco (Home)
-    startX = startX + gapIndicador
+    startX = startX + gapIndicadores
     valor  = 100-tonumber( conky_parse("${fs_free_perc /home}") )
-    indicadorArco(startX, startY, valor, "Home", cor4)
-    
+    indicadorArco(startX, startY, valor, "Home", corHOME)
+
     -- Indicador Disco (Root)
-    startX = startX + gapIndicador
+    startX = startX + gapIndicadores
     valor  = 100 - tonumber( conky_parse("${fs_free_perc /}") )
-    indicadorArco(startX, startY, valor, "Root", cor5)
+    indicadorArco(startX, startY, valor, "Root", corROOT)
 end
 
 function processos(processosX, processosY)
     local procX = processosX
-    local pidX =  procX + 200
-    local cpuX =  pidX + 90
-    local memX =  cpuX + 90
-    local largura = 450
+    local pidX =  procX + (0.5*largura)
+    local cpuX =  pidX +  (0.5*largura/3)
+    local memX =  cpuX +  (0.5*largura/3)
 
     local y = processosY + alturaLinhaTabela + margensBorda
 
 --    --Titulos da tabela
-    txt = "Processos"
+    local txt = "Processos"
     texto(txt, procX, y, tableFontColor, fontSize)
     txt = "PID"
     texto(txt, pidX, y, tableFontColor, fontSize)
@@ -431,6 +436,7 @@ function processos(processosX, processosY)
     texto(txt, cpuX, y, tableFontColor, fontSize)
     txt = "MEM%"
     texto(txt, memX, y, tableFontColor, fontSize)
+
 
     -- Desenha bordas do titulo
     desenhaTabela(processosX, y, -1, largura)
@@ -448,10 +454,66 @@ function processos(processosX, processosY)
         texto(mem,  memX,  y, tableFontColorRede, fontSize)
         desenhaTabela(processosX, y, i, largura)
     end
-    
+
     --Titulo
     local altura = y - processosY
     titulo(tituloProcessos, processosX, processosY, corBordaProcessos, altura, largura, gapProcessos)
+end
+
+function info(startX, startY)
+  --Titulo
+  local altura = 8*alturaLinhaTabela
+  titulo(tituloInfo, startX, startY, corBordaInfo, altura, largura, gapInfo)
+
+  local uptime = tostring(conky_parse("${uptime}"))
+  local osVer = tostring(conky_parse("${exec cat /etc/issue.net}"))
+  local processador = tostring(conky_parse("${execi 1000 cat /proc/cpuinfo|grep 'model name'|sed -e 's/model name.*: //'| uniq | cut -c 1-32}"))
+  local kernel = tostring(conky_parse("$kernel"))
+  local host = tostring(conky_parse("${nodename}"))
+  local updates = tonumber(conky_parse("${execi 360 aptitude search \"~U\" | wc -l | tail}"))
+
+  local x = startX + margensBorda
+  local y = startY + alturaLinhaTabela + alturaLinhaTabela
+  texto("Uptime:", x, y, corLabel, fontSize)
+  x = x + 60
+  texto(uptime, x, y, corValor, fontSize)
+  
+  x = startX + margensBorda
+  y = y + alturaLinhaTabela
+  texto("SO:", x, y, corLabel, fontSize)
+  x = x + 30
+  texto(osVer, x, y, corValor, fontSize)
+
+  x = startX + margensBorda
+  y = y + alturaLinhaTabela
+  texto("Processador:", x, y, corLabel, fontSize)
+  x = x + 105
+  texto(processador, x, y, corValor, fontSize)
+
+  x = startX + margensBorda
+  y = y + alturaLinhaTabela
+  texto("Kernel:", x, y, corLabel, fontSize)
+  x = x + 55
+  texto(kernel, x, y, corValor, fontSize)
+
+  x = startX + margensBorda
+  y = y + alturaLinhaTabela
+  texto("Host:", x, y, corLabel, fontSize)
+  x = x + 45
+  texto(host, x, y, corValor, fontSize)
+
+  x = startX + margensBorda
+  y = y + alturaLinhaTabela
+  texto("Updates:", x, y, corLabel, fontSize)
+  x = x + 72
+  texto(updates, x, y, corValor, fontSize)
+  
+  if updates>0 then
+    x = x + 400
+    y = y + 2*alturaLinhaTabela
+    local tam = 60
+    texto("*", x, y, cor3, tam)
+  end
 end
 
 function conky_main()
@@ -468,9 +530,12 @@ function conky_main()
 
     -- Indicadores
     if exibeIndicadores then indicadores(indicadoresX, indicadoresY) end
-    
+
     -- Processos
     if exibeProcessos then processos(processosX, processosY) end
+    
+    -- Informações
+    if exibeInfo then info(infoX, infoY) end
 
     -- Finaliza cairo
     cairo_destroy(cr)
