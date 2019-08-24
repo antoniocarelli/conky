@@ -3,8 +3,8 @@ exibeRede = true
 exibeListaPortasRede = false
 tituloRede = "Rede"
 gapRede = 90
-redeX = 650 --1200
-redeY = 235
+redeX = 1200 --650
+redeY = 245
 
 -- Indicadores
 exibeIndicadores = true
@@ -12,7 +12,7 @@ tituloIndicadores = "Indicadores"
 gapTituloIndicadores = 185
 gapIndicadores = 120
 indicadoresX = redeX
-indicadoresY = 50
+indicadoresY = 60
 raioIndicador = 50
 espessuraIndicador = 8
 
@@ -21,14 +21,14 @@ exibeProcessos = true
 tituloProcessos = "Processos"
 gapProcessos = 170
 processosX = redeX
-processosY = 470
+processosY = 480
 
 -- Informações
 exibeInfo = true
 tituloInfo = "Info"
 gapInfo = 75
 infoX = redeX
-infoY = 780
+infoY = 790
 
 -- Cores
 cor1 = "44d31f"
@@ -384,7 +384,7 @@ end
 
 function indicadores(startX, startY)
     gapIndicadores = largura / 5
-    
+
     --Titulo
     local altura = gapIndicadores - alturaLinhaTabela
     --local largura = 5*gapIndicadores
@@ -393,7 +393,7 @@ function indicadores(startX, startY)
     -- Centraliza a posição dos indicadores.
     startX = startX + 15
     startY = startY + 15
-    
+
     -- Indicador CPU
     local valor = tonumber( conky_parse("${cpu cpu0}") )
     indicadorArco(startX, startY, valor, "CPU", corCPU)
@@ -448,10 +448,10 @@ function processos(processosX, processosY)
         local mem  = conky_parse("${top mem " .. i .. "}")
 
         y = y + alturaLinhaTabela
-        texto(proc, procX, y, tableFontColorRede, fontSize)
-        texto(pid,  pidX,  y, tableFontColorRede, fontSize)
-        texto(cpu,  cpuX,  y, tableFontColorRede, fontSize)
-        texto(mem,  memX,  y, tableFontColorRede, fontSize)
+        texto(proc, procX, y, tableFontColor, fontSize)
+        texto(pid,  pidX,  y, tableFontColor, fontSize)
+        texto(cpu,  cpuX,  y, tableFontColor, fontSize)
+        texto(mem,  memX,  y, tableFontColor, fontSize)
         desenhaTabela(processosX, y, i, largura)
     end
 
@@ -477,7 +477,7 @@ function info(startX, startY)
   texto("Uptime:", x, y, corLabel, fontSize)
   x = x + 60
   texto(uptime, x, y, corValor, fontSize)
-  
+
   x = startX + margensBorda
   y = y + alturaLinhaTabela
   texto("SO:", x, y, corLabel, fontSize)
@@ -507,10 +507,10 @@ function info(startX, startY)
   texto("Updates:", x, y, corLabel, fontSize)
   x = x + 72
   texto(updates, x, y, corValor, fontSize)
-  
+
   if updates>0 then
-    x = x + 400
-    y = y + 2*alturaLinhaTabela
+    x = startX + largura - 15
+    y = y + 3*alturaLinhaTabela
     local tam = 60
     texto("*", x, y, cor3, tam)
   end
@@ -533,7 +533,7 @@ function conky_main()
 
     -- Processos
     if exibeProcessos then processos(processosX, processosY) end
-    
+
     -- Informações
     if exibeInfo then info(infoX, infoY) end
 
