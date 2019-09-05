@@ -396,6 +396,7 @@ function indicadores(startX, startY)
 
     -- Indicador CPU
     local valor = tonumber( conky_parse("${cpu cpu0}") )
+    indicadorArco(startX, startY, valor, "", corCPU)  -- Fix stupid position bug
     indicadorArco(startX, startY, valor, "CPU", corCPU)
 
     -- Indicador RAM
@@ -471,6 +472,7 @@ function info(startX, startY)
   local kernel = tostring(conky_parse("$kernel"))
   local host = tostring(conky_parse("${nodename}"))
   local updates = tonumber(conky_parse("${execi 360 aptitude search \"~U\" | wc -l | tail}"))
+--  local updatelist = tostring(conky_parse("${exec apt list --upgradable}"))
 
   local x = startX + margensBorda
   local y = startY + alturaLinhaTabela + alturaLinhaTabela
@@ -509,6 +511,10 @@ function info(startX, startY)
   texto(updates, x, y, corValor, fontSize)
 
   if updates>0 then
+--    y = y + alturaLinhaTabela
+--    x = x + 72
+--    texto(updatelist, x, y, corValor, fontSize)
+
     x = startX + largura - 15
     y = y + 3*alturaLinhaTabela
     local tam = 60
