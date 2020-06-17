@@ -1,11 +1,3 @@
--- Rede
-exibeRede = true
-exibeListaPortasRede = false
-tituloRede = "Rede"
-gapRede = 90
-redeX = 1200 --650
-redeY = 245
-
 -- Indicadores
 exibeIndicadores = true
 tituloIndicadores = "Indicadores"
@@ -15,6 +7,15 @@ indicadoresX = redeX
 indicadoresY = 60
 raioIndicador = 50
 espessuraIndicador = 8
+
+
+-- Rede
+exibeRede = true
+exibeListaPortasRede = false
+tituloRede = "Rede"
+gapRede = 90
+redeX = 50 --1200 --650
+redeY = 245
 
 -- Processos
 exibeProcessos = true
@@ -31,6 +32,33 @@ infoX = redeX
 infoY = 790
 
 -- Cores
+Branco = "FFFFFF"
+
+Laranja3 = "D75825"
+Amarelo3 = "D78B25"
+Azul3 = "1F5C8A"
+Verde3 = "19935F"
+
+Laranja1 = "FFA37E"
+Amarelo1 = "FFC87E"
+Azul1 = "5B89AD"
+Verde1 = "5AB68F"
+
+Laranja2 = "E77A4F"
+Amarelo2 = "E7A64F"
+Azul2 = "396D95"
+Verde2 = "369F72"
+
+Laranja4 = "AB3D12"
+Amarelo4 = "AB6A12"
+Azul4 = "12466E"
+Verde4 = "0C7548"
+
+Laranja5 = "842600"
+Amarelo5 = "844C00"
+Azul5 = "053255"
+Verde5 = "005B34"
+
 cor1 = "44d31f"
 cor2 = "df3b11"
 cor3 = "f35aca"
@@ -41,26 +69,27 @@ cor7 = "8E8831"
 cor8 = "62A5A5"
 cor9 = "8A522D"
 cor10 = "1B314B"
-corBorda = "00a4d1"
-corLabel = cor5
-corValor = cor6
-tableFontColor = "FFFFFF"
-corTitulo = "FFFFFF" -- Linha do cabecalho
-corPar = "53c9d6"    -- Linhas pares
-corImpar = "61EAF9"  -- Linhas impares
+cor11 = "00a4d1"
+corBorda = Laranja3
+corLabel = Amarelo3
+corValor = Branco
+tableFontColor = Branco
+corTitulo = Verde5  --Branco -- Linha do cabecalho
+corPar = Verde3     --"53c9d6"    -- Linhas pares
+corImpar = Verde4   --"61EAF9"  -- Linhas impares
 corBordaRede = corBorda
 corBordaIndicadores = corBorda
 corBordaProcessos = corBorda
 corBordaInfo = corBorda
-corCPU  = cor6
-corRAM  = cor6
-corSWAP = cor6
-corHOME = cor6
-corROOT = cor6
+corCPU  = Azul2
+corRAM  = Azul2
+corSWAP = Azul2
+corHOME = Azul2
+corROOT = Azul2
 
 
 -- Configuracoes gerais
-fontName="Technical CE"
+fontName="Technical"
 fontSize=17
 largura = 650
 
@@ -268,7 +297,7 @@ function desenhaTabela(xx, yy, pos, largura)
 end
 
 function openPorts(x, y)
-  local txt = "Open Ports:"
+  local txt = "Connections:"
   texto(txt, x, y, corLabel, fontSize)
 
   local xx = x + 100
