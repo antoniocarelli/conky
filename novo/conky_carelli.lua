@@ -1,14 +1,3 @@
--- Indicadores
-exibeIndicadores = true
-tituloIndicadores = "Indicadores"
-gapTituloIndicadores = 185
-gapIndicadores = 120
-indicadoresX = redeX
-indicadoresY = 60
-raioIndicador = 50
-espessuraIndicador = 8
-
-
 -- Rede
 exibeRede = true
 exibeListaPortasRede = false
@@ -17,17 +6,27 @@ gapRede = 90
 redeX = 50 --1200 --650
 redeY = 245
 
+-- Indicadores
+exibeIndicadores = true
+tituloIndicadores = "Indicadores"
+gapTituloIndicadores = 230
+gapIndicadores = 120
+indicadoresX = redeX
+indicadoresY = 60
+raioIndicador = 50
+espessuraIndicador = 8
+
 -- Processos
 exibeProcessos = true
 tituloProcessos = "Processos"
-gapProcessos = 170
+gapProcessos = 187
 processosX = redeX
 processosY = 480
 
 -- Informações
 exibeInfo = true
 tituloInfo = "Info"
-gapInfo = 75
+gapInfo = 85
 infoX = redeX
 infoY = 790
 
@@ -89,8 +88,8 @@ corROOT = Azul2
 
 
 -- Configuracoes gerais
-fontName="Technical"
-fontSize=17
+fontName="Roboto Mono"
+fontSize=14
 largura = 650
 
 -- Customizacoes dos adaptadores de rede
@@ -186,7 +185,7 @@ function titulo(label, xInicial, yInicial, corHex, altura, largura, gap)
   -- Desenha a linha horizontal superior
   local startX = xInicial
   local startY = yInicial - ajusteTituloY
-  local endX = startX + 40
+  local endX = startX + 50
   local endY = startY
   desenhaLinha(corHex, startX, startY, endX, endY, espessuraBorda)
 
@@ -300,7 +299,7 @@ function openPorts(x, y)
   local txt = "Connections:"
   texto(txt, x, y, corLabel, fontSize)
 
-  local xx = x + 100
+  local xx = x + 110
   local numPorts = tonumber(conky_parse("${tcp_portmon 1 65535 count}"))
   texto(numPorts, xx, y, corValor, fontSize)
 
@@ -380,7 +379,7 @@ function pip (x, y)
   texto("Public IP:", xx, yy, corLabel, fontSize)
 
   local ip = tostring(conky_parse("${execi 3600 curl ipinfo.io/ip}"))
-  xx = x + 75
+  xx = x + 90
   texto(ip, xx, yy, corValor, fontSize)
 
   return yy
@@ -440,7 +439,7 @@ function indicadores(startX, startY)
 
     -- Indicador Disco (Home)
     startX = startX + gapIndicadores
-    valor  = 100-tonumber( conky_parse("${fs_free_perc /home}") )
+    valor  = 100-tonumber( conky_parse("${fs_free_perc /home/antoniocarelli}") )
     indicadorArco(startX, startY, valor, "Home", corHOME)
 
     -- Indicador Disco (Root)
@@ -524,7 +523,7 @@ function info(startX, startY)
   x = startX + margensBorda
   y = y + alturaLinhaTabela
   texto("Kernel:", x, y, corLabel, fontSize)
-  x = x + 55
+  x = x + 60
   texto(kernel, x, y, corValor, fontSize)
 
   x = startX + margensBorda
