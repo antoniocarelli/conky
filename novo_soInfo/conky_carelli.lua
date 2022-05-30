@@ -1,5 +1,5 @@
 -- Rede
-exibeRede = true
+exibeRede = false
 exibeListaPortasRede = false
 tituloRede = "Rede"
 gapRede = 90
@@ -7,7 +7,7 @@ redeX = 50 --1200 --650
 redeY = 245
 
 -- Indicadores
-exibeIndicadores = true
+exibeIndicadores = false
 tituloIndicadores = "Indicadores"
 gapTituloIndicadores = 230
 gapIndicadores = 120
@@ -17,18 +17,18 @@ raioIndicador = 50
 espessuraIndicador = 8
 
 -- Processos
-exibeProcessos = true
+exibeProcessos = false
 tituloProcessos = "Processos"
 gapProcessos = 187
 processosX = redeX
 processosY = 480
 
 -- Informações
-exibeInfo = false
+exibeInfo = true
 tituloInfo = "Info"
 gapInfo = 85
 infoX = redeX
-infoY = 790
+infoY = 60
 
 -- Cores
 Branco = "FFFFFF"
@@ -90,7 +90,7 @@ corROOT = Azul2
 -- Configuracoes gerais
 fontName="Roboto Medium"
 fontSize=14
-largura = 650
+largura = 450
 
 -- Customizacoes dos adaptadores de rede
 wlanAdapter = "wlp0s20f3"
