@@ -1,16 +1,16 @@
 -- Rede
 exibeRede = true
-exibeListaPortasRede = false
-tituloRede = "Rede"
-gapRede = 90
+exibeListaPortasRede =false
+tituloRede = " Rede"
+gapRede = 95
 redeX = 50 --1200 --650
 redeY = 245
 
 -- Indicadores
 exibeIndicadores = true
-tituloIndicadores = "Indicadores"
+tituloIndicadores = " Indicadores"
 gapTituloIndicadores = 230
-gapIndicadores = 120
+gapIndicadores = 80
 indicadoresX = redeX
 indicadoresY = 60
 raioIndicador = 50
@@ -18,14 +18,14 @@ espessuraIndicador = 8
 
 -- Processos
 exibeProcessos = true
-tituloProcessos = "Processos"
+tituloProcessos = " Processos"
 gapProcessos = 187
 processosX = redeX
 processosY = 480
 
 -- Informações
-exibeInfo = false
-tituloInfo = "Info"
+exibeInfo = true
+tituloInfo = " Info"
 gapInfo = 85
 infoX = redeX
 infoY = 790
@@ -33,8 +33,8 @@ infoY = 790
 -- Cores
 Branco = "FFFFFF"
 
-Laranja3 = "D75825"
-Amarelo3 = "D78B25"
+Laranja3 = "003A5D"
+Amarelo3 = "CE0E2D"
 Azul3 = "1F5C8A"
 Verde3 = "19935F"
 
@@ -45,7 +45,7 @@ Verde1 = "5AB68F"
 
 Laranja2 = "E77A4F"
 Amarelo2 = "E7A64F"
-Azul2 = "396D95"
+Azul2 = "3DAE2B"
 Verde2 = "369F72"
 
 Laranja4 = "AB3D12"
@@ -73,9 +73,9 @@ corBorda = Laranja3
 corLabel = Amarelo3
 corValor = Branco
 tableFontColor = Branco
-corTitulo = Verde5  --Branco -- Linha do cabecalho
-corPar = Verde3     --"53c9d6"    -- Linhas pares
-corImpar = Verde4   --"61EAF9"  -- Linhas impares
+corTitulo = Verde5
+corPar = Verde3
+corImpar = Verde4
 corBordaRede = corBorda
 corBordaIndicadores = corBorda
 corBordaProcessos = corBorda
@@ -94,7 +94,7 @@ largura = 650
 
 -- Customizacoes dos adaptadores de rede
 wlanAdapter = "wlp0s20f3"
-ethAdapter = "enp1s0"
+ethAdapter = "enp44s0"
 
 -- Configurações das bordas
 raioBorda = 20

@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=conky
-Exec=conky --daemonize --pause=1 -c '/home/carelli/conky/novo/conky_carelli.conf'
+Exec=conky --daemonize --pause=1 -c '/home/carelli/git/conky/novo/conky_carelli.conf'
 StartupNotify=false
 Terminal=false
-Icon=/home/carelli/Pessoais/Imagens/Logos/conky.png
+Icon=/mnt/dados/Pessoais/Imagens/Logos/conky_icon.png
 Categories=System;Monitor;
