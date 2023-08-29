@@ -1,34 +1,38 @@
--- Rede
-exibeRede = true
-exibeListaPortasRede =false
-tituloRede = " Rede"
-gapRede = 95
-redeX = 50 --1200 --650
-redeY = 245
+-- Posição Inicial
+iniX = 50
+iniY = 60
 
 -- Indicadores
 exibeIndicadores = true
 tituloIndicadores = " Indicadores"
 gapTituloIndicadores = 230
 gapIndicadores = 80
-indicadoresX = redeX
-indicadoresY = 60
+indicadoresX = iniX
+indicadoresY = iniY
 raioIndicador = 50
 espessuraIndicador = 8
+
+-- Rede
+exibeRede = true
+exibeListaPortasRede =false
+tituloRede = " Rede"
+gapRede = 95
+redeX = iniX
+redeY = iniY + 185
 
 -- Processos
 exibeProcessos = true
 tituloProcessos = " Processos"
 gapProcessos = 187
-processosX = redeX
-processosY = 480
+processosX = iniX
+processosY = iniY + 420
 
 -- Informações
 exibeInfo = true
 tituloInfo = " Info"
 gapInfo = 85
-infoX = redeX
-infoY = 790
+infoX = iniX
+infoY = iniY + 730
 
 -- Cores
 Branco = "FFFFFF"
