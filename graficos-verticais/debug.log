@@ -1,0 +1,90 @@
+conky -c /home/antonio/codes/conky/graficos-verticais/conky.conf -DD
+DEBUG(0) [./src/conky.cc:2096]: reading contents from config file '/home/antonio/codes/conky/graficos-verticais/conky.conf'
+DEBUG(0) [./src/output/x11.cc:247]: enter init_x11()
+DEBUG(0) [./src/output/x11.cc:368]: Fixed xinerama area to: 0 0 2560 1080
+DEBUG(0) [./src/output/x11.cc:291]: leave init_x11()
+DEBUG(0) [./src/output/x11.cc:486]: enter x11_init_window()
+DEBUG(0) [./src/output/x11.cc:368]: Fixed xinerama area to: 0 0 2560 1080
+conky: desktop window (0x375) is root window
+DEBUG(0) [./src/output/x11.cc:463]: Found ARGB Visual
+conky: window type - dock
+DEBUG(0) [./src/output/x11.cc:698]: hint - undecorated
+DEBUG(0) [./src/output/x11.cc:709]: hint - below
+DEBUG(0) [./src/output/x11.cc:753]: hint - sticky
+DEBUG(0) [./src/output/x11.cc:775]: hint - skip taskbar
+DEBUG(0) [./src/output/x11.cc:788]: hint - skip pager
+conky: drawing to created window (0x1000002)
+DEBUG(0) [./src/output/x11.cc:907]: leave x11_init_window()
+conky: drawing to double buffer
+DEBUG(1) [./src/core.cc:2109]: no templates to replace
+DEBUG(0) [./src/output/display-output.cc:39]: HTTP display output disabled. Enable by recompiling with 'BUILD_HTTP' flag enabled.
+conky: FOUND: wayland
+conky: FOUND: x11
+conky: FOUND: file
+conky: FOUND: ncurses
+conky: FOUND: console
+DEBUG(1) [./src/output/display-output.cc:101]: Testing display output 'wayland'... 
+DEBUG(1) [./src/output/display-output.cc:101]: Testing display output 'x11'... 
+DEBUG(1) [./src/output/display-x11.cc:233]: Display output 'x11' enabled in config.
+DEBUG(1) [./src/output/display-output.cc:103]: Detected display output 'x11'... 
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/lua/fonts.cc:84]: loading fonts
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(0) [./src/output/display-output.cc:111]: Initialized display output 'x11'... 
+DEBUG(1) [./src/output/display-output.cc:101]: Testing display output 'file'... 
+DEBUG(1) [./src/output/display-output.cc:101]: Testing display output 'ncurses'... 
+DEBUG(1) [./src/output/display-output.cc:101]: Testing display output 'console'... 
+conky: 'unknown' wayland session running
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 23 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 23 events.
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/lua/fonts.cc:84]: loading fonts
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 2 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 2 events.
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 4 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 4 events.
+DEBUG(1) [./src/lua/fonts.cc:84]: loading fonts
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
+DEBUG(1) [./src/lua/fonts.cc:84]: loading fonts
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
+DEBUG(1) [./src/lua/fonts.cc:84]: loading fonts
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
+DEBUG(1) [./src/lua/fonts.cc:84]: loading fonts
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
+DEBUG(1) [./src/lua/fonts.cc:84]: loading fonts
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
+DEBUG(1) [./src/lua/fonts.cc:84]: loading fonts
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
+DEBUG(1) [./src/lua/fonts.cc:84]: loading fonts
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
+DEBUG(1) [./src/lua/fonts.cc:84]: loading fonts
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
+DEBUG(1) [./src/lua/fonts.cc:84]: loading fonts
+DEBUG(1) [./src/lua/fonts.cc:64]: setting up fonts
+DEBUG(1) [./src/output/display-x11.cc:817]: Processing 1 X11 events...
+DEBUG(1) [./src/output/display-x11.cc:838]: Done processing 1 events.
