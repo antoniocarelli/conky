@@ -774,6 +774,8 @@ function conky_main()
     texto("Up", grafX + netPad, graphInsetLabelBaseline(netGY1, netGH1, netLabelFs, netPad), corRedeUp, netLabelFs, "left", true)
     texto("Down", grafX + netPad, graphInsetLabelBaseline(netGY2, netGH2, netLabelFs, netPad), corRedeDown, netLabelFs, "left", true)
 
+    -- == Section 6: Ollama ==
+    footerY = footerY + gapSecao
     draw_ollama_footer_table()
 
     if DEBUG_DRAW then
