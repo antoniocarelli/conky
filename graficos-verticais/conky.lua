@@ -37,6 +37,12 @@ useNvidiaSmi = true
 -- Seconds between `nvidia-smi` runs (Conky `execi` cache); higher = less CPU, slower UI updates.
 nvidiaSmiInterval = 5
 
+-- Footer: `ollama ps` table (same font size as stats row). Set false if Ollama is not installed.
+useOllamaFooter = true
+ollamaPsInterval = 5
+ollamaFooterMaxDataRows = 1
+ollamaFooterLineH = 16
+
 local GRAPH_LEN = 30
 
 -- Rolling samples for time-series graphs (updated each conky cycle)
@@ -63,6 +69,68 @@ local function trim(s)
         return ""
     end
     return (tostring(s):gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
+-- Strip common ANSI/CSI sequences (ollama may emit progress codes when attached to a TTY).
+local function strip_ansi(s)
+    if s == nil then
+        return ""
+    end
+    s = tostring(s)
+    s = s:gsub("\27%[%d+;%d*[mGKH]", "")
+    s = s:gsub("\27%[[%d;?]*[mGKH]", "")
+    s = s:gsub("\27%[%?%d+[hl]", "")
+    s = s:gsub("\27%[%d*[ABCDEFJKST]", "")
+    return s
+end
+
+-- Split `ollama ps`-style rows on runs of 3+ spaces (keeps e.g. "1.9 GB" as one cell).
+local function split_row_ws3(line)
+    line = trim(line)
+    if line == "" then
+        return {}
+    end
+    local parts = {}
+    local pos = 1
+    while pos <= #line do
+        while pos <= #line and line:sub(pos, pos):match("%s") do
+            pos = pos + 1
+        end
+        if pos > #line then
+            break
+        end
+        local br = line:find("%s%s%s+", pos)
+        if br then
+            parts[#parts + 1] = trim(line:sub(pos, br - 1))
+            pos = br
+        else
+            parts[#parts + 1] = trim(line:sub(pos))
+            break
+        end
+    end
+    return parts
+end
+
+-- Parse `ollama ps` text: data rows with ID column (index 2) removed → 5 columns.
+local function parse_ollama_ps_table(raw)
+    raw = strip_ansi(trim(raw))
+    local rowsOut = {}
+    if raw == "" then
+        return rowsOut
+    end
+    for line in raw:gmatch("[^\r\n]+") do
+        line = trim(strip_ansi(line))
+        if line ~= "" then
+            if line:find("No running", 1, true) then
+                return rowsOut
+            end
+            local p = split_row_ws3(line)
+            if #p >= 6 and p[1] ~= "NAME" and p[1] ~= "" then
+                rowsOut[#rowsOut + 1] = { p[1], p[3], p[4], p[5], p[6] }
+            end
+        end
+    end
+    return rowsOut
 end
 
 local function hist_push(buf, v, maxlen)
@@ -111,6 +179,7 @@ corDiscoWrite = "#E8A868"     -- write (G) graph
 corRede = "#2EC4D9"           -- Wi-Fi section accent / title underline
 corRedeUp = "#2EC4D9"         -- upload graph (same family as section)
 corRedeDown = "#5AB4E8"       -- download graph
+corOllama = "#A78BFA"         -- Ollama footer section underline
 
 -- Typography (modelo: white titles, light grey stats)
 corTitulo = "#FFFFFF"
@@ -432,12 +501,98 @@ function conky_main()
     local grafW = math.max(120, contentW - 2 * grafPad)
     local grafX = margensBorda + (contentW - grafW) / 2
 
-    local bottomReserve = 28
+    local bottomReserveBase = 8
+    local ollamaFooterReserve = 0
+    if useOllamaFooter then
+        ollamaFooterReserve = alturaCabecalhoSec
+            + gapTituloGrafico
+            + (1 + ollamaFooterMaxDataRows) * ollamaFooterLineH
+            + 12
+    end
+    local bottomReserve = bottomReserveBase + ollamaFooterReserve
     local topInset = gapSecao
     local gapsEntreSecoes = 4 * gapSecao
     local alturaSecao = (height - topInset - margensBorda - bottomReserve - gapsEntreSecoes) / 5
     if alturaSecao < 40 then
         alturaSecao = 40
+    end
+
+    -- Top Y of the Ollama footer block (below the fifth section).
+    local footerY = topInset + 5 * alturaSecao + 4 * gapSecao
+
+    local function measure_text_ink_w(txt, fs, bold)
+        cairo_save(cr)
+        cairo_select_font_face(
+            cr,
+            fontName,
+            CAIRO_FONT_SLANT_NORMAL,
+            bold and CAIRO_FONT_WEIGHT_BOLD or CAIRO_FONT_WEIGHT_NORMAL
+        )
+        cairo_set_font_size(cr, fs)
+        local ext = cairo_text_extents_t:create()
+        tolua.takeownership(ext)
+        cairo_text_extents(cr, tostring(txt), ext)
+        cairo_restore(cr)
+        return math.max(0.5, (ext.x_bearing or 0) + (ext.width or 0))
+    end
+
+    local function draw_ollama_footer_table()
+        if not useOllamaFooter then
+            return
+        end
+        local raw = trim(conky_parse("${execi " .. ollamaPsInterval .. " ollama ps 2>/dev/null}"))
+        local rows = parse_ollama_ps_table(raw)
+        local rightHint = #rows > 0 and (tostring(#rows) .. " running") or "idle"
+        secao_cabecalho_linha("Ollama", rightHint, x, footerY, corOllama, contentW)
+
+        local tblTop = footerY + alturaCabecalhoSec + gapTituloGrafico
+        local baseline0 = tblTop + statsRowFontSize + 2
+        local fs = statsRowFontSize
+        local colGap = 6
+        local ncols = 5
+        local headers = { "Modelo", "Tamanho", "Processador", "Contexto", "Até" }
+        local display = { headers }
+        for i = 1, math.min(#rows, ollamaFooterMaxDataRows) do
+            display[#display + 1] = rows[i]
+        end
+
+        local colW = {}
+        for c = 1, ncols do
+            colW[c] = 0
+        end
+        for _, row in ipairs(display) do
+            for c = 1, ncols do
+                local cell = tostring(row[c] or "")
+                colW[c] = math.max(colW[c], measure_text_ink_w(cell, fs, false))
+            end
+        end
+        local sumW = colGap * (ncols - 1)
+        for c = 1, ncols do
+            sumW = sumW + colW[c]
+        end
+        local maxTableW = math.max(40, contentW - 8)
+        if sumW > maxTableW then
+            local scale = maxTableW / sumW
+            for c = 1, ncols do
+                colW[c] = colW[c] * scale
+            end
+        end
+
+        local yb = baseline0
+        for ri, row in ipairs(display) do
+            local xc = x + 4
+            local rowColor = (ri == 1) and corTextoStatsDim or corTextoStats
+            for c = 1, ncols do
+                local maxChars = math.max(4, math.floor(colW[c] / 5.8))
+                local cell = trunc(tostring(row[c] or ""), maxChars)
+                texto(cell, xc, yb, rowColor, fs, "left", false)
+                xc = xc + colW[c] + colGap
+            end
+            yb = yb + ollamaFooterLineH
+        end
+        if #rows == 0 then
+            texto("No running models", x + 4, yb, corTextoStatsDim, fs, "left", false)
+        end
     end
 
     local grafBottomPad = 6
@@ -618,6 +773,8 @@ function conky_main()
     local netPad = 8
     texto("Up", grafX + netPad, graphInsetLabelBaseline(netGY1, netGH1, netLabelFs, netPad), corRedeUp, netLabelFs, "left", true)
     texto("Down", grafX + netPad, graphInsetLabelBaseline(netGY2, netGH2, netLabelFs, netPad), corRedeDown, netLabelFs, "left", true)
+
+    draw_ollama_footer_table()
 
     if DEBUG_DRAW then
         local dbgLines = {
