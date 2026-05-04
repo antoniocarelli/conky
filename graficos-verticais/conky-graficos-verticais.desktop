@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Conky graficos-verticais
+Comment=Vertical system monitor (Conky + Lua)
+Exec=conky -c /home/carelli/codes/conky/graficos-verticais/conky.conf
+Icon=conky-logomark-violet
+TryExec=conky
+Terminal=false
+StartupNotify=false
+Categories=System;Monitor;
+X-GNOME-Autostart-enabled=true
